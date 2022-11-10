@@ -1,15 +1,19 @@
 import React from 'react'
 // import GoogleLogin from 'react-google-login'
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google'
+import { GoogleOAuthProvider, GoogleLogin, useGoogleLogin } from '@react-oauth/google'
 import { useNavigate } from 'react-router-dom'
 import { FcGoogle } from 'react-icons/fc';
 import shareVideo from '../assets/share.mp4'
 import logo from '../assets/logowhite.png'
+import { createOrGetUser } from './utils';
+
 
 const Login = () => {
 
   const responseGoogle = (response) => {
-    console.log(response)
+    // localStorage.setItem('user', JSON.stringify(response.profileObj))
+    // console.log(response);
+    createOrGetUser(response);
   }
 
   return (
@@ -33,17 +37,7 @@ const Login = () => {
               clientId={`${process.env.REACT_APP_GOOGLE_API_TOKEN_2}`}
             >
               <GoogleLogin
-                // render={(renderProps) => (
-                //   <button
-                //     type='button'
-                //     className='bg-mainColor flex justify-center items-center p-3 rounded-lg cursor-pointer outline-none'
-                //     onClick={renderProps.onClick}
-                //     disabled={renderProps.disabled}
-                //   >
-                //     <FcGoogle className='mr-4' /> Sign in with Google
-                //   </button>
-                // )}
-                onSuccess={(response)=> console.log(response)}
+                onSuccess={responseGoogle}
                 onError={()=> console.log('Error')}
                 // cookiePolicy='single_host_origin'
               />;
