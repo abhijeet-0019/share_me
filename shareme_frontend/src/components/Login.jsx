@@ -5,15 +5,36 @@ import { useNavigate } from 'react-router-dom'
 import { FcGoogle } from 'react-icons/fc';
 import shareVideo from '../assets/share.mp4'
 import logo from '../assets/logowhite.png'
-import { createOrGetUser } from './utils';
-
+// import { createOrGetUser } from './utils';
+import { client } from '../client';
+import jwt_decode from 'jwt-decode'
 
 const Login = () => {
+
+  const navigate = useNavigate();
 
   const responseGoogle = (response) => {
     // localStorage.setItem('user', JSON.stringify(response.profileObj))
     // console.log(response);
-    createOrGetUser(response);
+    // createOrGetUser(response);
+    localStorage.setItem('user', JSON.stringify(response.credential))
+    console.log(response.credential)
+    const {name, picture, sub} = jwt_decode(response.credential);
+
+    const doc = {
+        _id: sub,
+        _type: 'user',
+        userName: name,
+        image: picture,
+    }
+
+    client.createIfNotExists(doc)
+        .then(()=> {
+            navigate('/', {replace: true})
+        })    
+    // isgooglelogin is successfull we should be redirected to local host:3000 i.e. Home
+
+    console.log(name, picture, sub);
   }
 
   return (

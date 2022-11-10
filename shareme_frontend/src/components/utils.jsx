@@ -1,5 +1,6 @@
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
+import { Navigate } from 'react-router-dom'
 import { client } from '../client'
 
 export const createOrGetUser = async (response) => {
@@ -15,8 +16,9 @@ export const createOrGetUser = async (response) => {
     }
 
     client.createIfNotExists(doc)
-        .then(()=> )
-    // saving user to database
+        .then(()=> {
+            Navigate('/', {replace: true})
+        })    // saving user to database
 
     console.log(name, picture, sub);
 }
