@@ -18,7 +18,7 @@ const Login = () => {
     // console.log(response);
     // createOrGetUser(response);
     localStorage.setItem('user', JSON.stringify(response.credential))
-    console.log(response.credential)
+    console.log("response.credential --->",response.credential)
     const {name, picture, sub} = jwt_decode(response.credential);
 
     const doc = {

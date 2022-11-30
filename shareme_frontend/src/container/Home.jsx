@@ -8,6 +8,7 @@ import { userQuery } from '../utils/data';
 import { client } from '../client';
 import Pins from './Pins';
 import logo from '../assets/logo.png';
+import jwt_decode from 'jwt-decode'
 
 const Home = () => {
   const [toggleSidebar, setToggleSidebar] = useState(false);
@@ -17,12 +18,19 @@ const Home = () => {
   const userInfo = localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user')) : localStorage.clear();
 
   useEffect(() => {
+    console.log("local storage",localStorage)
     console.log("userInfo",userInfo)
     const query = userQuery(userInfo?.sub);
-
-    client.fetch(query).then((data) => {
-      setUser(data[0]);
-    });
+    console.log("query --->", query)
+    const {name, picture, sub} = jwt_decode(userInfo);
+    console.log("image_url ----> ", picture);
+    setUser(jwt_decode(userInfo))
+    console.log("user ------>", user.name)
+    // setUser(data_picture)
+    // client.fetch(query).then((data) => {
+    //   console.log("--------------------")
+    //   setUser(data[0]);
+    // });
   }, []);
 
   useEffect(() => {
@@ -40,8 +48,8 @@ const Home = () => {
           <Link to="/">
             <img src={logo} alt="logo" className="w-28" />
           </Link>
-          <Link to={`user-profile/${user?._id}`}>
-            <img src={user?.image} alt="user-pic" className="w-9 h-9 rounded-full " />
+          <Link to={`user-profile/${user?.sub}`}>
+            <img src={user.picture} alt="user-pic" className="w-9 h-9 rounded-full " />
           </Link>
         </div>
         {toggleSidebar && (
